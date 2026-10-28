@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Mòdul mínim de demostració per a la prova d'edició en calent.
+ */
+
+/**
+ * Implements hook_page_top().
+ */
+function bsl_client_docs_page_top(array &$page_top) {
+  \Drupal::messenger()->addStatus('bsl_client_docs: versio 2');
+}

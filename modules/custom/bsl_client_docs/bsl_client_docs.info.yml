@@ -1,0 +1,5 @@
+name: Traçabilitat d'accés a documents
+type: module
+description: Mòdul mínim de demostració per a l'entorn de desenvolupament.
+package: BCN SecureLegal
+core_version_requirement: ^10 || ^11

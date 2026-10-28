@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.11
+    container_name: bsl-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-bsl_secure_root_pass}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-bsl_drupal}
+      MARIADB_USER: ${MARIADB_USER:-drupal_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-bsl_drupal_pass_2026}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  drupal:
+    image: drupal:10-apache
+    container_name: bsl-drupal
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal_sites:/var/www/html/sites
+      - ./modules/custom/bsl_client_docs:/var/www/html/modules/custom/bsl_client_docs
+
+volumes:
+  db_data:
+  drupal_sites:
