@@ -44,6 +44,11 @@ jobs:
           tools: phpcs
       - name: Instal·lar l'estàndard Drupal
         run: composer global require drupal/coder:^8.3 --no-interaction --quiet
+      - name: Sintaxi PHP
+        run: |
+          find modules -name '*.php' -o -name '*.module' -o -name '*.install' | while read -r f; do
+            php -l "$f"
+          done
       - name: Validar el codi del mòdul
         run: phpcs --standard=Drupal --extensions=php,module,install,inc modules/
 
