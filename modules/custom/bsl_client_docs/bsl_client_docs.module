@@ -3,11 +3,19 @@
 /**
  * @file
  * Mòdul mínim de demostració per a la prova d'edició en calent.
+ *
+ * Aquest mòdul NO és la versió de producció: només valida que el bind mount
+ * del docker-compose.yml propaga els canvis del host al contenidor sense
+ * reiniciar-lo. La versió completa (registre d'accessos, caducitat d'enllaços
+ * i permisos) es descriu al document 02, apartat 2.4.
  */
 
 /**
  * Implements hook_page_top().
+ *
+ * @param array $page_top
+ *   Elements que es renderitzen a la part superior de la pàgina.
  */
-function bsl_client_docs_page_top(array &$page_top) {
+function bsl_client_docs_page_top(array &$page_top): void {
   \Drupal::messenger()->addStatus('bsl_client_docs: versio 2');
 }
