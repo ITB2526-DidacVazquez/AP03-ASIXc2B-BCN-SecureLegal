@@ -1,36 +1,103 @@
-version: '3.8'
+# BCN SecureLegal S.L. — Pila On-Premise (Drupal 10 + MariaDB)
+# ---------------------------------------------------------------------------
+# Ús:
+#   cp .env.example .env      # defineix contrasenyes reals abans d'aixecar res
+#   docker compose config     # valida la configuració
+#   docker compose up -d
+#
+# Les imatges estan fixades a versions concretes per garantir la reproducibilitat
+# del desplegament. Es poden sobreescriure des del fitxer .env (DRUPAL_IMAGE,
+# MARIADB_IMAGE) sense editar aquest fitxer.
+# ---------------------------------------------------------------------------
+
+name: bcn-securelegal
 
 services:
   db:
-    image: mariadb:10.11
+    image: ${MARIADB_IMAGE:-mariadb:10.11.19}
     container_name: bsl-db
     restart: unless-stopped
+
+    # Codificació i intercalació exigides pel projecte (RGPD: dades amb accents,
+    # caràcters catalans i textos multilingües).
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
     environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-bsl_secure_root_pass}
+      # Sense valor per defecte: si falta la variable, el desplegament s'atura
+      # en lloc d'arrencar amb una contrasenya coneguda.
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Definiu MARIADB_ROOT_PASSWORD al fitxer .env}
       MARIADB_DATABASE: ${MARIADB_DATABASE:-bsl_drupal}
       MARIADB_USER: ${MARIADB_USER:-drupal_user}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-bsl_drupal_pass_2026}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?Definiu MARIADB_PASSWORD al fitxer .env}
+
     volumes:
       - db_data:/var/lib/mysql
+
+    # Només a la xarxa interna: no té accés a Internet ni al host.
+    networks:
+      - backend
+
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
       timeout: 5s
       retries: 10
+      start_period: 30s
+
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   drupal:
-    image: drupal:10-apache
+    image: ${DRUPAL_IMAGE:-drupal:10.6.19-apache}
     container_name: bsl-drupal
     restart: unless-stopped
+
     depends_on:
       db:
         condition: service_healthy
+
+    # Publicat només a la interfície d'escolta local: el tràfic extern ha
+    # d'arribar sempre pel proxy invers amb TLS 1.3 del CPD.
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
+
     volumes:
+      # Persistència de configuració i fitxers públics.
       - drupal_sites:/var/www/html/sites
+      # Documents confidencials FORA de l'arrel web (file_private_path).
+      - drupal_private:/var/www/private
+      # Codi propi en calent (només entorn de desenvolupament).
       - ./modules/custom/bsl_client_docs:/var/www/html/modules/custom/bsl_client_docs
+
+    networks:
+      - backend   # accés a la base de dades
+      - edge      # accés des del proxy invers / host
+
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 volumes:
   db_data:
   drupal_sites:
+  drupal_private:
+
+networks:
+  # Xarxa sense sortida: aïlla la base de dades de qualsevol destí extern.
+  backend:
+    internal: true
+  edge:
+    driver: bridge
