@@ -83,6 +83,10 @@ AP03-ASIXc2B-BCN-SecureLegal/
 │   ├── workflows/ci.yml            # CI: yamllint, phpcs, docker compose config
 │   └── pull_request_template.md    # Plantilla de revisió creuada
 ├── modules/custom/bsl_client_docs/ # Mòdul propi (versió de demostració)
+├── lliurament/                     # Documents i presentació lliurats
+│   ├── AP03-practica-lliurament.docx
+│   ├── Memoria-Tecnica-Exercici-4.docx
+│   └── Presentacio-Projecte-6-diapositives.pptx
 └── docs/
     ├── 00-cultura-oberta-i-traçabilitat.md
     ├── 01-business-case.md
@@ -163,6 +167,10 @@ docker inspect -f '{{.State.StartedAt}}' bsl-drupal
 | [05 — Memòria i planificació](docs/05-memoria-i-planificacio.md) | Objectius, 80 h, Gantt i càrregues ponderades |
 | [06 — Seguretat i compliment](docs/06-seguretat-compliment-i-riscos.md) | Model d'amenaces, backups, RTO/RPO i normativa |
 | [07 — Lliurament AP03](docs/07-practica-ap03-lliurament.md) | Text complet del lliurament acadèmic |
+| [Guió de la presentació](docs/presentacio-guio.md) | 7 diapositives, locució i preguntes previsibles |
+
+Els fitxers lliurats (pràctica, memòria i presentació) són a la carpeta
+[`lliurament/`](lliurament/).
 
 ## 7. Flux de treball amb Git
 
