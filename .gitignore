@@ -1,4 +1,23 @@
+# Secrets i configuració local
 .env
+*.env.local
+
+# Sistema operatiu
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Logs i borses de backup
 *.log
+backup_*.sql
+*_*.tar.gz
+
+# Entorn de desenvolupament
+.vscode/
+.idea/
+*.swp
+
+# Fitxers generats per Drupal/Composer (no es versionen)
+vendor/
+core/
+web/
