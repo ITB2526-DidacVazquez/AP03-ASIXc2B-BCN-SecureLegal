@@ -1,0 +1,19 @@
+# Normalització de finals de línia
+* text=auto eol=lf
+
+# Fitxers binaris
+*.docx binary
+*.pptx binary
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.zip  binary
+
+# Fitxers de configuració de Git
+.gitattributes text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.md   text eol=lf
+
+# No mostrar diffs de fitxers generats
+composer.lock -diff
