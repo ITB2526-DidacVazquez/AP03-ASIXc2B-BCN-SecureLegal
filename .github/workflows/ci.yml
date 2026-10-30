@@ -1,0 +1,62 @@
+name: CI
+
+"on":
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-yaml:
+    name: YAML (yamllint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instal·lar yamllint
+        run: pip install --quiet yamllint
+      - name: Validar YAML
+        run: |
+          yamllint -d "{extends: default, rules: {line-length: disable, document-start: disable, comments-indentation: disable}}" \
+            docker-compose.yml .github/workflows/ci.yml
+
+  validate-compose:
+    name: Docker Compose (config)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar entorn de prova
+        run: cp .env.example .env
+      - name: Validar la configuració
+        run: docker compose config --quiet
+
+  lint-php:
+    name: PHP (Drupal standard)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: phpcs
+      - name: Permetre el connector de phpcs
+        run: composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+      - name: Instal·lar l'estàndard Drupal
+        run: composer global require drupal/coder:^8.3 --no-interaction --quiet
+      - name: Validar el codi del mòdul
+        run: phpcs --standard=Drupal --extensions=php,module,install,inc modules/
+
+  check-secrets:
+    name: Secrets (cap .env versionat)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprovar que no hi ha secrets versionats
+        run: |
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "ERROR: el fitxer .env no s'ha de versionar"; exit 1
+          fi
+          echo "OK: cap fitxer .env versionat"
