@@ -86,7 +86,7 @@ AP03-ASIXc2B-BCN-SecureLegal/
 ├── lliurament/                     # Documents i presentació lliurats
 │   ├── AP03-practica-lliurament.docx
 │   ├── Memoria-Tecnica-Exercici-4.docx
-│   └── Presentacio-Projecte-6-diapositives.pptx
+│   └── Presentacio-Projecte-7-diapositives.pptx
 └── docs/
     ├── 00-cultura-oberta-i-traçabilitat.md
     ├── 01-business-case.md
@@ -190,7 +190,7 @@ Detall complet a [CONTRIBUTING.md](CONTRIBUTING.md) i al
 ## 8. Estat del projecte, limitacions i roadmap
 
 **Versió actual: `v1.0.0`** — lliurament AP03 (28/10/2026). Branca `main` neta, CI en
-verd, 8 documents versionats.
+verd, 9 documents versionats.
 
 ### Limitacions conegudes
 
