@@ -4,6 +4,41 @@ Tots els canvis rellevants d'aquest projecte es documenten en aquest fitxer.
 El format segueix [Keep a Changelog](https://keepachangelog.com/ca/1.1.0/) i el
 versionat semàntic [SemVer](https://semver.org/lang/ca/).
 
+## [1.0.3] — 2026-10-30
+
+### Afegit
+
+* Diapositiva 5 «Cultura Oberta i Traçabilitat»: tres blocs (codi auditable,
+  traçabilitat de cada canvi i compliment normatiu) i la cadena Kanban → branca → PR
+  → CI → tag → desplegament.
+* Guió de presentació reescrit per seguir l'ordre real de les 7 diapositives.
+
+### Canviat
+
+* Renumerada la diapositiva de conclusions (5 → 6).
+* El fitxer lliurat passa a dir-se `Presentacio-Projecte-7-diapositives.pptx`.
+
+## [1.0.2] — 2026-10-30
+
+### Afegit
+
+* La CI valida la sintaxi PHP (`php -l`) abans d'executar `phpcs`.
+
+## [1.0.1] — 2026-10-30
+
+### Afegit
+
+* Guió de la presentació amb locució per diapositiva i preguntes previsibles.
+* Els fitxers lliurats (pràctica, memòria i presentació) s'incorporen al repositori
+  a la carpeta `lliurament/`.
+
+### Corregit
+
+* `.docx` i `.pptx`: «directorist» → «directoris», nota interna «s'ha de verificar»
+  eliminada, «districte 22@» duplicat, «amb Github», «hook hook_page_top» redundant i
+  «Cruzado» → «Creuat».
+* Xifres de la presentació i de la memòria: 80 h i 26,7 / 26,8 / 26,5 h.
+
 ## [1.0.0] — 2026-10-28
 
 ### Afegit
